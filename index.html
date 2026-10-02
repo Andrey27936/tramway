@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TRAMWAY</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Oswald:wght@400;500;600;700&family=Golos+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<style>
+  /* Design: after thehives.com — full-bleed black & white photography,
+     pure black ground, cream display type, theatrical stacked headline, square cream CTAs.
+     Oswald condensed bold carries the voice; Golos Text only for reading paragraphs. */
+  :root{
+    color-scheme: dark;
+    --bg:#0b0b0a;
+    --bg-raised:#161614;
+    --ink:#efe6d2;
+    --muted:#9b9488;
+    --spark:#c1603a;
+    --line: rgba(239,230,210,0.16);
+    --font-display:'Oswald', sans-serif;
+    --font-body:'Golos Text', 'Segoe UI', sans-serif;
+    --font-mono:'JetBrains Mono', ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto;} }
+  h1,h2,h3,.wordmark{
+    font-family:var(--font-display);
+    font-weight:700;
+    margin:0;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  ::selection{background:var(--spark); color:var(--bg);}
+
+  .wrap{max-width:900px; margin:0 auto; padding:0 28px;}
+  .center{max-width:680px; margin:0 auto; text-align:center;}
+
+  /* ---------- Nav ---------- */
+  .site-nav{
+    position:sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    padding:18px 28px;
+    padding-left:max(28px, env(safe-area-inset-left, 0px));
+    padding-right:max(28px, env(safe-area-inset-right, 0px));
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .site-nav .wordmark{font-size:1.1rem; letter-spacing:0.04em;}
+  .nav-links{
+    display:flex;
+    gap:24px;
+    overflow-x:auto;
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+  }
+  .nav-links::-webkit-scrollbar{display:none;}
+  .nav-links a{
+    flex:none;
+    font-family:var(--font-display);
+    font-weight:500;
+    font-size:0.82rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--muted);
+    text-decoration:none;
+    padding-bottom:3px;
+    border-bottom:2px solid transparent;
+    transition:color 0.2s ease, border-color 0.2s ease;
+    white-space:nowrap;
+  }
+  .nav-links a:hover{color:var(--ink);}
+  .nav-links a.active{color:var(--ink); border-color:var(--spark);}
+
+  /* ---------- Hero photo (no text over the image, like thehives.com) ---------- */
+  .hero-photo{
+    height:86svh;
+    min-height:420px;
+    background:url('tramway-img/lineup-main.jpg') center 30% / cover no-repeat;
+    filter:saturate(0.72) brightness(0.9) contrast(1.08);
+  }
+
+  /* ---------- Statement block ---------- */
+  .statement{
+    padding:90px 28px;
+    text-align:center;
+    border-bottom:1px solid var(--line);
+  }
+  .statement .eyebrow{
+    color:var(--muted);
+    font-family:var(--font-display);
+    font-size:0.85rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .statement .stack{
+    font-size:clamp(2.6rem, 10vw, 6rem);
+    line-height:0.98;
+  }
+  .statement .stack .dim{color:var(--muted);}
+  .statement .tagline{
+    margin-top:28px;
+    color:var(--muted);
+    font-size:1.05rem;
+    max-width:460px;
+    margin-left:auto; margin-right:auto;
+  }
+  .cta-row{
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:36px;
+  }
+  .btn{
+    display:inline-block;
+    background:var(--ink);
+    color:var(--bg);
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:15px 30px;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  .btn:hover{background:var(--spark); color:var(--ink);}
+  .btn-outline{
+    display:inline-block;
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--ink);
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:0.85rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    text-decoration:none;
+    padding:14px 30px;
+    transition:background 0.2s ease, color 0.2s ease;
+  }
+  .btn-outline:hover{background:var(--ink); color:var(--bg);}
+
+  /* ---------- Sections ---------- */
+  section{
+    padding:80px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .section-head{text-align:center; margin-bottom:40px;}
+  .section-num{
+    display:block;
+    font-family:var(--font-mono);
+    color:var(--spark);
+    font-size:0.8rem;
+    letter-spacing:0.1em;
+    margin-bottom:10px;
+  }
+  h2{
+    font-size:clamp(1.8rem, 5vw, 3rem);
+    text-wrap:balance;
+  }
+  p{margin:0 0 1em 0;}
+  .lede{font-size:1.1rem; color:var(--ink);}
+
+  figure{margin:0;}
+  .photo{overflow:hidden; background:var(--bg-raised);}
+  .photo img{
+    width:100%; height:100%; object-fit:cover;
+    filter:saturate(0.72) brightness(0.92) contrast(1.06);
+    transition:transform 0.5s ease, filter 0.35s ease;
+  }
+  .photo:hover img{filter:saturate(0.88) brightness(0.98) contrast(1.08);}
+  .photo:hover img{transform:scale(1.04);}
+
+  /* ---------- Reveal ---------- */
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity 0.6s ease, transform 0.6s ease;}
+  .reveal.is-visible{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){ .reveal{transition:none; opacity:1; transform:none;} }
+
+  /* ---------- Lineup ---------- */
+  .lineup-photo{aspect-ratio:16/9; margin-bottom:40px;}
+  .lineup-photo img{object-position:center 12%;}
+  .members{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:28px 40px;
+    text-align:center;
+  }
+  .member{flex:0 1 240px; min-width:0; padding:8px 0;}
+  @media (max-width:640px){
+    .members{flex-direction:column; gap:0;}
+    .member{flex:none; padding:20px 0; border-top:1px solid var(--line);}
+  }
+  .member h3{font-size:1.15rem; font-weight:600; text-transform:none;}
+  .member .role{color:var(--muted); font-family:var(--font-mono); font-size:0.82rem; letter-spacing:0.04em; text-transform:uppercase; margin-top:6px;}
+
+  /* ---------- Release ---------- */
+  .cover{aspect-ratio:1/1; max-width:360px; margin:0 auto 32px;}
+  .cover img{filter:none;}
+  .release-tag{
+    display:inline-block;
+    font-family:var(--font-mono);
+    font-size:0.76rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--spark);
+    margin-bottom:10px;
+  }
+  .release h3{font-size:1.6rem; margin-bottom:8px; text-transform:none;}
+  .release .label{color:var(--muted); font-size:0.92rem; font-family:var(--font-mono);}
+
+  .tracklist{margin-top:40px; max-width:520px; margin-left:auto; margin-right:auto; border-top:1px solid var(--line);}
+  .track{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    padding:12px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:0.95rem;
+  }
+  .track .num{color:var(--muted); font-family:var(--font-mono); width:20px; flex:none;}
+  .track .name{flex:1; text-align:left;}
+  .track .dur{color:var(--muted); font-family:var(--font-mono); font-size:0.88rem;}
+  .singles-label{text-align:center; margin-top:40px; color:var(--spark); font-family:var(--font-mono); font-size:0.8rem; letter-spacing:0.1em; text-transform:uppercase;}
+
+  /* ---------- Manifesto ---------- */
+  .manifesto-photo{max-width:320px; aspect-ratio:3/4; margin:0 auto 40px;}
+  .manifesto-text{
+    max-width:520px;
+    margin:0 auto;
+    color:var(--muted);
+    font-size:1.08rem;
+  }
+  .manifesto-text span{display:block;}
+  .manifesto-text .gap{height:1em;}
+
+  /* ---------- Gallery ---------- */
+  .gallery{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:4px;
+  }
+  .gallery .photo{aspect-ratio:1/1;}
+  .gallery a:nth-child(1){grid-column:span 2; grid-row:span 2;}
+  @media (max-width:640px){
+    .gallery{grid-template-columns:repeat(2, 1fr);}
+    .gallery a:nth-child(1){grid-column:span 2; grid-row:span 1; aspect-ratio:16/10;}
+    .gallery a:nth-child(1) .photo{aspect-ratio:16/10;}
+  }
+
+  /* ---------- Gigs ---------- */
+  .gig-empty{
+    max-width:480px;
+    margin:0 auto;
+    border:1px solid var(--line);
+    padding:40px 28px;
+    text-align:center;
+    color:var(--muted);
+  }
+  .gig-empty strong{color:var(--ink); display:block; font-family:var(--font-display); font-size:1.2rem; margin-bottom:10px; text-transform:uppercase;}
+
+  /* ---------- Contacts ---------- */
+  .contact-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:32px 40px;
+    max-width:560px;
+    margin:0 auto;
+    text-align:center;
+  }
+  @media (max-width:560px){ .contact-grid{grid-template-columns:1fr;} }
+  .contact-item .k{color:var(--muted); font-family:var(--font-mono); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:6px;}
+  .contact-item .v{font-size:1.2rem; font-variant-numeric:tabular-nums;}
+  .contact-item .v a{text-decoration:none; border-bottom:1px solid var(--spark);}
+  .contact-item .v a:hover{color:var(--spark);}
+
+  footer{
+    padding:40px 28px 56px;
+    text-align:center;
+    color:var(--muted);
+    font-family:var(--font-mono);
+    font-size:0.78rem;
+    letter-spacing:0.04em;
+  }
+  footer div{margin-top:6px;}
+
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--spark);
+    outline-offset:3px;
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" id="siteNav">
+  <div class="wordmark">TRAMWAY</div>
+  <div class="nav-links">
+    <a href="#about" data-stop="about">О группе</a>
+    <a href="#lineup" data-stop="lineup">Состав</a>
+    <a href="#music" data-stop="music">Музыка</a>
+    <a href="#manifesto" data-stop="manifesto">Манифест</a>
+    <a href="#gallery" data-stop="gallery">Концерты</a>
+    <a href="#gigs" data-stop="gigs">Афиши</a>
+    <a href="#contacts" data-stop="contacts">Контакты</a>
+  </div>
+</nav>
+
+<div class="hero-photo" role="img" aria-label="Группа TRAMWAY на сцене"></div>
+
+<section class="statement">
+  <div class="eyebrow">рок-группа · г. Челябинск</div>
+  <h1 class="stack">TRAMWAY<br><span class="dim">НАВСЕГДА</span></h1>
+  <p class="tagline">трамваи — люди железные, трамваи — люди устойчивые, даже если не трезвые.</p>
+  <div class="cta-row">
+    <a class="btn" href="#music">Слушать альбом</a>
+    <a class="btn-outline" href="https://vk.ru/tr174" target="_blank" rel="noopener">TramWay ВКонтакте</a>
+  </div>
+</section>
+
+<div class="wrap">
+
+  <section class="reveal" id="about">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <h2>О группе</h2>
+    </div>
+    <div class="center">
+      <p class="lede">TRAMWAY — рок-группа из Челябинска, которая играет так же, как ходит городской трамвай: размеренно, упрямо и без остановок по требованию. В основе — гитарный рок с блюзовым нервом и текстами, в которых больше правды, чем пафоса.</p>
+      <p>Группа существует для тех, кто слушает музыку не в наушниках по дороге на работу, а стоя вплотную к колонке на живом концерте.</p>
+    </div>
+  </section>
+
+  <section class="reveal" id="lineup">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <h2>Состав</h2>
+    </div>
+    <figure class="photo lineup-photo">
+      <img src="tramway-img/lineup-stage.jpg" alt="Группа TRAMWAY на сцене" loading="lazy">
+    </figure>
+    <div class="members">
+      <div class="member"><h3>Вадим Рева</h3><div class="role">Вокал, гитара, музыка</div></div>
+      <div class="member"><h3>Игорь Бакин</h3><div class="role">Вокал, тексты песен</div></div>
+      <div class="member"><h3>Вячеслав Анджела</h3><div class="role">Гитара, вокал, аранжировки</div></div>
+      <div class="member"><h3>Артур Машковский</h3><div class="role">Бас-гитара</div></div>
+      <div class="member"><h3>Марат Чапаев</h3><div class="role">Барабаны</div></div>
+    </div>
+  </section>
+
+  <section class="reveal" id="music">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <h2>Музыка</h2>
+    </div>
+    <div class="center">
+      <figure class="photo cover">
+        <img src="tramway-img/album.jpg" alt="Обложка «По ночному городу»" loading="lazy">
+      </figure>
+      <div class="release-tag">альбом</div>
+      <h3>По ночному городу</h3>
+      <div class="label">10 треков · Лейбл: Insane Dream Music</div>
+      <p style="margin-top:16px; color:var(--muted);">Альбом о городе, который не спит, и о трамвае, который всё равно идёт по расписанию — сквозь ночь, неон и мокрый асфальт.</p>
+      <div class="cta-row">
+        <a class="btn-outline" href="https://vk.ru/tr174" target="_blank" rel="noopener">Слушать в ВКонтакте</a>
+      </div>
+    </div>
+
+    <div class="tracklist">
+      <div class="track"><span class="num">01</span><span class="name">Тра-ля-ля</span><span class="dur">3:12</span></div>
+      <div class="track"><span class="num">02</span><span class="name">Высокий каблук</span><span class="dur">2:35</span></div>
+      <div class="track"><span class="num">03</span><span class="name">Мания</span><span class="dur">4:06</span></div>
+      <div class="track"><span class="num">04</span><span class="name">Ты хороша</span><span class="dur">3:54</span></div>
+      <div class="track"><span class="num">05</span><span class="name">Хиромантия</span><span class="dur">3:02</span></div>
+      <div class="track"><span class="num">06</span><span class="name">По ночному городу</span><span class="dur">3:04</span></div>
+      <div class="track"><span class="num">07</span><span class="name">Листья</span><span class="dur">5:00</span></div>
+      <div class="track"><span class="num">08</span><span class="name">Полёты</span><span class="dur">3:40</span></div>
+      <div class="track"><span class="num">09</span><span class="name">Вода</span><span class="dur">2:51</span></div>
+      <div class="track"><span class="num">10</span><span class="name">Рок-н-блюз</span><span class="dur">3:31</span></div>
+    </div>
+
+    <div class="singles-label">синглы</div>
+    <div class="tracklist">
+      <div class="track"><span class="name">Хей, Беби</span><span class="dur">3:34</span></div>
+      <div class="track"><span class="name">Волки</span><span class="dur">3:30</span></div>
+    </div>
+  </section>
+
+  <section class="reveal" id="manifesto">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <h2>Манифест</h2>
+    </div>
+    <figure class="photo manifesto-photo">
+      <img src="tramway-img/poster.jpg" alt="Постер TRAMWAY" loading="lazy">
+    </figure>
+    <div class="manifesto-text">
+      <span>Трамваи — люди железные,</span>
+      <span>трамваи — люди устойчивые!</span>
+      <span>Даже если не трезвые</span>
+      <span>и в связях не очень разборчивые.</span>
+      <div class="gap"></div>
+      <span>Мы просто демократичные!!!</span>
+      <span>Нам выбирать не приходится:</span>
+      <span>хорошие ли, отличные ли —</span>
+      <span>подумаешь, пересортица…</span>
+      <div class="gap"></div>
+      <span>Разных везём и хороших —</span>
+      <span>вот такое у нас занятие…</span>
+      <span>Возим любых… а всё же</span>
+      <span>хороших возить приятнее!!!</span>
+    </div>
+  </section>
+
+  <section class="reveal" id="gallery">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <h2>С концертов</h2>
+    </div>
+    <div class="gallery">
+      <a class="photo" href="tramway-img/gallery-2.jpg" target="_blank" rel="noopener"><img src="tramway-img/gallery-2.jpg" alt="Концерт TRAMWAY" loading="lazy"></a>
+      <a class="photo" href="tramway-img/gallery-1.jpg" target="_blank" rel="noopener"><img src="tramway-img/gallery-1.jpg" alt="Концерт TRAMWAY, сцена Rock&Blues" loading="lazy"></a>
+      <a class="photo" href="tramway-img/gallery-3.jpg" target="_blank" rel="noopener"><img src="tramway-img/gallery-3.jpg" alt="Гитарист TRAMWAY" loading="lazy"></a>
+      <a class="photo" href="tramway-img/gallery-4.jpg" target="_blank" rel="noopener"><img src="tramway-img/gallery-4.jpg" alt="Гитара на сцене" loading="lazy"></a>
+      <a class="photo" href="tramway-img/gallery-5.jpg" target="_blank" rel="noopener"><img src="tramway-img/gallery-5.jpg" alt="Участник группы" loading="lazy"></a>
+    </div>
+  </section>
+
+  <section class="reveal" id="gigs">
+    <div class="section-head">
+      <span class="section-num">06</span>
+      <h2>Афиши</h2>
+    </div>
+    <div class="gig-empty">
+      <strong>Следующая остановка уточняется</strong>
+      Дата и площадка ближайшего концерта скоро появятся здесь и в группе ВКонтакте.
+    </div>
+  </section>
+
+  <section class="reveal" id="contacts" style="border-bottom:none;">
+    <div class="section-head">
+      <span class="section-num">07</span>
+      <h2>Контакты</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <div class="k">Телефон</div>
+        <div class="v"><a href="tel:+79226364849">+7 (922) 636-48-49</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="k">Сообщество</div>
+        <div class="v"><a href="https://vk.ru/tr174" target="_blank" rel="noopener">TramWay ВКонтакте</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="k">Подписчики</div>
+        <div class="v">398</div>
+      </div>
+      <div class="contact-item">
+        <div class="k">Город</div>
+        <div class="v">Челябинск</div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  <div>© TRAMWAY, ЧЕЛЯБИНСК</div>
+  <div>РОК-ГРУППА, КОТОРАЯ ХОДИТ ПО РАСПИСАНИЮ</div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var nav = document.getElementById('siteNav');
+    var links = Array.prototype.slice.call(nav.querySelectorAll('a'));
+    var sections = links.map(function(a){ return document.getElementById(a.dataset.stop); });
+    if('IntersectionObserver' in window){
+      var navObs = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if(e.isIntersecting){
+            links.forEach(function(a){ a.classList.remove('active'); });
+            var link = nav.querySelector('a[data-stop="'+e.target.id+'"]');
+            if(link) link.classList.add('active');
+          }
+        });
+      }, {rootMargin:'-40% 0px -55% 0px'});
+      sections.forEach(function(s){ if(s) navObs.observe(s); });
+    }
+  }catch(e){}
+})();
+
+(function(){
+  try{
+    var els = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduced || !('IntersectionObserver' in window)){
+      els.forEach(function(el){ el.classList.add('is-visible'); });
+      return;
+    }
+    var revealObs = new IntersectionObserver(function(entries, o){
+      entries.forEach(function(e){
+        if(e.isIntersecting){ e.target.classList.add('is-visible'); o.unobserve(e.target); }
+      });
+    }, {threshold:0.1});
+    els.forEach(function(el){ revealObs.observe(el); });
+  }catch(e){
+    document.querySelectorAll('.reveal').forEach(function(el){ el.classList.add('is-visible'); });
+  }
+})();
+</script>
+</body>
+</html>
